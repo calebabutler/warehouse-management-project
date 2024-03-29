@@ -1,0 +1,8 @@
+
+Database setup
+
+Products
+- Product Code
+- Name
+- In-Transit
+- Warehouse ID
