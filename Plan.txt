@@ -1,5 +1,5 @@
 Plan:
-- Decide the design that the database should have
+/ Decide the design that the database should have
 - Complete backend REST API for dealing with said database
 - Decide the design the UI should have (generally)
 - Implement UI in HTML/CSS
