@@ -21,3 +21,5 @@ Warehouses
 - Warehouse ID
 - Warehouse Name
 - Warehouse Description
+
+Categories I start with: Food, Electronics, Plants
