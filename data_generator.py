@@ -7,7 +7,7 @@ def main():
     insert_statements = []
     for i in range(100):
         for j in range(random.randint(1, 5)):
-            insert_statements.append(f'insert into PRODUCTS (product_type_id, warehouse_id) values ({starting_value + i}, {warehouse_value})')
+            insert_statements.append(f'insert into PRODUCTS (product_type_id, warehouse_id) values ({starting_value + i}, {warehouse_value});')
     random.shuffle(insert_statements)
     for statement in insert_statements:
         print(statement)
