@@ -1,7 +1,7 @@
 Plan:
 / Decide the design that the database should have
 / Generate Fake Data
-- Complete backend REST API for dealing with said database
+/ Complete backend REST API for dealing with said database
 - Decide the design the UI should have (generally)
 - Implement UI in HTML/CSS
 - Connect front end with back end using TypeScript

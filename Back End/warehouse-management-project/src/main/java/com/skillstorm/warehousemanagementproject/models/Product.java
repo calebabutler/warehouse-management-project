@@ -16,7 +16,7 @@ public class Product {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "product_type_id")
@@ -34,17 +34,17 @@ public class Product {
         this.warehouse = warehouse;
     }
 
-    public Product(int id, ProductType type, Warehouse warehouse) {
+    public Product(Integer id, ProductType type, Warehouse warehouse) {
         this.id = id;
         this.type = type;
         this.warehouse = warehouse;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

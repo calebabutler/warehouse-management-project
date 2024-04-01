@@ -17,7 +17,7 @@ public class Warehouse {
     @Id
     @Column(name = "warehouse_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "warehouse_name")
     private String name;
@@ -37,18 +37,18 @@ public class Warehouse {
         this.products = products;
     }
 
-    public Warehouse(int id, String name, String description, Set<Product> products) {
+    public Warehouse(Integer id, String name, String description, Set<Product> products) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.products = products;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,0 +1,18 @@
+
+# Tell Spring where to get the data from
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/warehouse_manager
+        username: postgres
+        password: # Insert postgres password here
+        driverClassName: org.postgresql.Driver
+    output:
+        ansi:
+            enabled: ALWAYS
+    application:
+        name: warehouse-management-project
+
+#server:
+#    port: 8282 # Changes the port number that we are running on for the
+#               # server

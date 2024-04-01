@@ -19,7 +19,7 @@ public class ProductType {
     @Id
     @Column(name = "product_type_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "product_name")
     private String name;
@@ -44,7 +44,7 @@ public class ProductType {
         this.products = products;
     }
 
-    public ProductType(int id, String name, String description, ProductCategory category, Set<Product> products) {
+    public ProductType(Integer id, String name, String description, ProductCategory category, Set<Product> products) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,11 +52,11 @@ public class ProductType {
         this.products = products;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
