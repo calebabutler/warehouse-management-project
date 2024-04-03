@@ -10,20 +10,31 @@
 </head>
 <body>
     <header>
-        <nav class="py-2 bg-success bg-gradient text-light border-bottom">
+        <nav class="py-2 bg-success text-light border-bottom">
             <div class="container-xxl d-flex flex-wrap">
                 <ul class="nav me-auto">
                     <li class="nav-item nav-link link-light px-2">Warehouse Manager</li>
                 </ul>
                 <ul class="nav">
-                    <li class="nav-item"><a href="#" class="nav-link link-light px-2">Products</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-light px-2">Product Types</a></li>
+                    <li class="nav-item">
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
+                            <label class="btn btn-outline-light" for="btnradio1">Products</label>
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2">
+                            <label class="btn btn-outline-light" for="btnradio2">Product Types</label>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>
     </header>
     <main>
-        <div class="accordion container-xxl" id="warehouseList">
+        <div class="container-xxl d-grid gap-2">
+            <div class="accordion accordion-flush" id="warehouseList">
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-dark">Add a Warehouse</button>
+            </div>
         </div>
     </main>
 </body>
