@@ -8,7 +8,7 @@ import com.skillstorm.warehousemanagementproject.models.ProductType;
 import com.skillstorm.warehousemanagementproject.services.ProductTypeService;
 
 @RestController
-@RequestMapping("/product_type")
+@RequestMapping("/product_types")
 public class ProductTypeController extends BaseController<ProductType> {
 
     @Autowired
