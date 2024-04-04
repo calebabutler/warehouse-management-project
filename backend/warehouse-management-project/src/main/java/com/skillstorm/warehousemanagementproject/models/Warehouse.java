@@ -2,6 +2,8 @@ package com.skillstorm.warehousemanagementproject.models;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class Warehouse {
     @Column(name = "warehouse_description")
     private String description;
 
+    @JsonIgnore
     @OneToMany(targetEntity = Product.class, mappedBy = "warehouse")
     private Set<Product> products;
 

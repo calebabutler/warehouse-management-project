@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warehouse Manager</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script src="index.js" defer></script>
 </head>
+
 <body>
     <header>
         <nav class="py-2 bg-success text-light border-bottom">
@@ -17,24 +22,338 @@
                 </ul>
                 <ul class="nav">
                     <li class="nav-item">
-                        <div class="btn-group" role="group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
-                            <label class="btn btn-outline-light" for="btnradio1">Products</label>
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2">
-                            <label class="btn btn-outline-light" for="btnradio2">Product Types</label>
-                        </div>
+                        <form>
+                            <div class="btn-group" role="group">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked />
+                                <label class="btn btn-outline-light" for="btnradio1">Products</label>
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
+                                <label class="btn btn-outline-light" for="btnradio2">Product Types</label>
+                            </div>
+                        </form>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
+
+    <div class="modals">
+        <div class="modal fade" id="addWarehouseModal" tabindex="-1" aria-labelledby="addWarehouseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addWarehouseModalLabel">Add a Warehouse</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="addWarehouseNameInput" class="form-label">Warehouse Name:</label>
+                            <input type="text" class="form-control" id="addWarehouseNameInput" />
+                            <label for="addWarehouseDescriptionInput" class="form-label">Warehouse Description:</label>
+                            <input type="text" class="form-control" id="addWarehouseDescriptionInput" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editWarehouseModal" tabindex="-1" aria-labelledby="editWarehouseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editWarehouseModalLabel">Edit Warehouse</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="editWarehouseIdInput" class="form-label">Warehouse ID:</label>
+                                <input type="text" class="form-control" id="editWarehouseIdInput" />
+                            </fieldset>
+                            <label for="editWarehouseNameInput" class="form-label">Warehouse Name:</label>
+                            <input type="text" class="form-control" id="editWarehouseNameInput" />
+                            <label for="editWarehouseDescriptionInput" class="form-label">Warehouse Description:</label>
+                            <input type="text" class="form-control" id="editWarehouseDescriptionInput" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteWarehouseModal" tabindex="-1" aria-labelledby="deleteWarehouseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteWarehouseModalLabel">Delete Warehouse</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="deleteWarehouseIdInput" class="form-label">Warehouse ID:</label>
+                                <input type="text" class="form-control" id="deleteWarehouseIdInput" />
+                                <label for="deleteWarehouseNameInput" class="form-label">Warehouse Name:</label>
+                                <input type="text" class="form-control" id="deleteWarehouseNameInput" />
+                                <label for="deleteWarehouseDescriptionInput" class="form-label">Warehouse Description:</label>
+                                <input type="text" class="form-control" id="deleteWarehouseDescriptionInput" />
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Delete</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addProductModalLabel">Add a Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="addProductTypeSelect" class="form-label">Product Type:</label>
+                            <select class="form-select" id="addProductTypeSelect">
+                            </select>
+                            <label for="addProductWarehouseSelect" class="form-label">Warehouse:</label>
+                            <select class="form-select" id="addProductWarehouseSelect">
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editProductModalLabel">Edit Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="editProductIdInput" class="form-label">Product ID:</label>
+                                <input type="text" class="form-control" id="editProductIdInput" />
+                            </fieldset>
+                            <label for="editProductTypeSelect" class="form-label">Product Type:</label>
+                            <select class="form-select" id="editProductTypeSelect">
+                            </select>
+                            <label for="editProductWarehouseSelect" class="form-label">Warehouse:</label>
+                            <select class="form-select" id="editProductWarehouseSelect">
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteProductModalLabel">Delete Product</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="deleteProductIdInput" class="form-label">Product ID:</label>
+                                <input type="text" class="form-control" id="deleteProductIdInput" />
+                                <label for="deleteProductTypeSelect" class="form-label">Product Type:</label>
+                                <select class="form-select" id="deleteProductTypeSelect">
+                                </select>
+                                <label for="deleteProductWarehouseSelect" class="form-label">Warehouse:</label>
+                                <select class="form-select" id="deleteProductWarehouseSelect">
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addCategoryModalLabel">Add a Product Category</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="addCategoryNameInput" class="form-label">Category Name:</label>
+                            <input type="text" class="form-control" id="addCategoryNameInput" />
+                            <label for="addCategoryDescriptionInput" class="form-label">Category Description:</label>
+                            <input type="text" class="form-control" id="addCategoryDescriptionInput" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editCategoryModalLabel">Edit Product Category</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="editCategoryIdInput" class="form-label">Category ID:</label>
+                                <input type="text" class="form-control" id="editCategoryIdInput" />
+                            </fieldset>
+                            <label for="editCategoryNameInput" class="form-label">Category Name:</label>
+                            <input type="text" class="form-control" id="editCategoryNameInput" />
+                            <label for="editCategoryDescriptionInput" class="form-label">Category Description:</label>
+                            <input type="text" class="form-control" id="editCategoryDescriptionInput" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteCategoryModalLabel">Delete Product Category</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="deleteCategoryIdInput" class="form-label">Category ID:</label>
+                                <input type="text" class="form-control" id="deleteCategoryIdInput" />
+                                <label for="deleteCategoryNameInput" class="form-label">Category Name:</label>
+                                <input type="text" class="form-control" id="deleteCategoryNameInput" />
+                                <label for="deleteCategoryDescriptionInput" class="form-label">Category Description:</label>
+                                <input type="text" class="form-control" id="deleteCategoryDescriptionInput" />
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Delete</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addTypeModalLabel">Add a Product Type</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="addTypeNameInput" class="form-label">Type Name:</label>
+                            <input type="text" class="form-control" id="addTypeNameInput" />
+                            <label for="addTypeDescriptionInput" class="form-label">Type Description:</label>
+                            <input type="text" class="form-control" id="addTypeDescriptionInput" />
+                            <label for="addTypeCategorySelect" class="form-label">Category:</label>
+                            <select class="form-select" id="addTypeCategorySelect">
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="editTypeModal" tabindex="-1" aria-labelledby="editTypeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="editTypeModalLabel">Edit Product Type</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="editTypeIdInput" class="form-label">Type ID:</label>
+                                <input type="text" class="form-control" id="editTypeIdInput" />
+                            </fieldset>
+                            <label for="editTypeNameInput" class="form-label">Type Name:</label>
+                            <input type="text" class="form-control" id="editTypeNameInput" />
+                            <label for="editTypeDescriptionInput" class="form-label">Type Description:</label>
+                            <input type="text" class="form-control" id="editTypeDescriptionInput" />
+                            <label for="editTypeCategorySelect" class="form-label">Category:</label>
+                            <select class="form-select" id="editTypeCategorySelect">
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteTypeModal" tabindex="-1" aria-labelledby="deleteTypeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteTypeModalLabel">Delete Product Type</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset disabled>
+                                <label for="deleteTypeIdInput" class="form-label">Type ID:</label>
+                                <input type="text" class="form-control" id="deleteTypeIdInput" />
+                                <label for="deleteTypeNameInput" class="form-label">Type Name:</label>
+                                <input type="text" class="form-control" id="deleteTypeNameInput" />
+                                <label for="deleteTypeDescriptionInput" class="form-label">Type Description:</label>
+                                <input type="text" class="form-control" id="deleteTypeDescriptionInput" />
+                                <label for="deleteTypeCategorySelect" class="form-label">Category:</label>
+                                <select class="form-select" id="deleteTypeCategorySelect">
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Delete</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main>
         <div class="container-xxl d-grid gap-2" id="warehouseObject">
             <div></div>
             <div class="accordion" id="warehouseList">
             </div>
             <div class="row">
-                <button type="button" id="addWarehouseButton" class="btn btn-dark">Add a Warehouse</button>
+                <button type="button" id="addWarehouseButton" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">Add a Warehouse</button>
             </div>
         </div>
 
@@ -42,9 +361,10 @@
             <div class="accordion" id="categoryList" style="display:none;">
             </div>
             <div class="row">
-                <button type="button" class="btn btn-dark" id="addCategoryButton" style="display:none;">Add a Category</button>
+                <button type="button" class="btn btn-dark" id="addCategoryButton" style="display:none;" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add a Category</button>
             </div>
         </div>
     </main>
 </body>
+
 </html>
