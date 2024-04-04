@@ -29,12 +29,20 @@
         </nav>
     </header>
     <main>
-        <div class="container-xxl d-grid gap-2">
+        <div class="container-xxl d-grid gap-2" id="warehouseObject">
             <div></div>
             <div class="accordion" id="warehouseList">
             </div>
             <div class="row">
-                <button type="button" class="btn btn-dark">Add a Warehouse</button>
+                <button type="button" id="addWarehouseButton" class="btn btn-dark">Add a Warehouse</button>
+            </div>
+        </div>
+
+        <div class="container-xxl d-grid gap-2" id="categoryObject">
+            <div class="accordion" id="categoryList" style="display:none;">
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-dark" id="addCategoryButton" style="display:none;">Add a Category</button>
             </div>
         </div>
     </main>
