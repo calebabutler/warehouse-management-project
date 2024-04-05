@@ -14,6 +14,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.skillstorm.warehousemanagementproject.services.BaseService;
 
+/* All other controller classes in this project derive from this controller.
+ * The type it accepts is a model, for example Product, ProductCategory,
+ * ProductType, or Warehouse.
+ *
+ * The BaseController implements a generic CRUD interface. To create a new
+ * controller for a given model, do something like this:
+ * 
+ * 
+ * @RestController
+ * @RequestMapping("/product_categories")
+ * public class ProductCategoryController extends BaseController<ProductCategory> {
+ * 
+ *     @Autowired
+ *     void setService(ProductCategoryService service) {
+ *         this.service = service;
+ *     }
+ * 
+ * }
+ *
+ * It is important to have a good RequestMapping as that determines what URL
+ * you use to access this controller's API, as well as to autowire the
+ * equivalent service to your controller.
+ */
+
 @CrossOrigin("http://127.0.0.1:5500/")
 public class BaseController<T> {
 
