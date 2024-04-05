@@ -466,6 +466,117 @@ const updateDom = () => {
     }
 };
 
+const deleteDomWarehouse = id => {
+    document.getElementById('warehouse' + id).remove();
+    document.getElementById('warehouse' + id + 'addOption').remove();
+    document.getElementById('warehouse' + id + 'editOption').remove();
+    document.getElementById('warehouse' + id + 'deleteOption').remove();
+};
+
+const deleteDomCategory = id => {
+    document.getElementById('category' + id).remove();
+    document.getElementById('category' + id + 'addOption').remove();
+    document.getElementById('category' + id + 'editOption').remove();
+    document.getElementById('category' + id + 'deleteOption').remove();
+};
+
+const deleteDomProduct = id => {
+    document.getElementById('product' + id + 'row').remove();
+};
+
+const deleteDomProductType = id => {
+    document.getElementById('productType' + id + 'row').remove();
+    document.getElementById('productType' + id + 'addOption').remove();
+    document.getElementById('productType' + id + 'editOption').remove();
+    document.getElementById('productType' + id + 'deleteOption').remove();
+};
+
+const editDomWarehouse = warehouse => {
+    for (const house of databaseData['warehouses']) {
+        if (house.id === warehouse.id) {
+            house.name = warehouse.name;
+            house.description = warehouse.description;
+        }
+    }
+    for (const prod of databaseData['products']) {
+        if (prod.warehouse.id === warehouse.id) {
+            prod.warehouse = warehouse;
+        }
+    }
+    document.getElementById('warehouse' + warehouse.id + 'button').innerText = warehouse.id + '. ' + warehouse.name;
+    document.getElementById('warehouse' + warehouse.id + 'description').innerText = warehouse.description;
+    document.getElementById('warehouse' + warehouse.id + 'addOption').innerText = warehouse.id + '. ' + warehouse.name;
+    document.getElementById('warehouse' + warehouse.id + 'editOption').innerText = warehouse.id + '. ' + warehouse.name;
+    document.getElementById('warehouse' + warehouse.id + 'deleteOption').innerText = warehouse.id + '. ' + warehouse.name;
+};
+
+const editDomCategory = category => {
+    for (const cat of databaseData['categories']) {
+        if (cat.id === category.id) {
+            cat.name = category.name;
+            cat.description = category.description;
+        }
+    }
+    for (const type of databaseData['productTypes']) {
+        if (type.category.id === category.id) {
+            type.category = category;
+        }
+    }
+    for (const prod of databaseData['products']) {
+        if (prod.type.category.id === category.id) {
+            prod.type.category = category;
+        }
+    }
+    document.getElementById('category' + category.id + 'button').innerText = category.id + '. ' + category.name;
+    document.getElementById('category' + category.id + 'description').innerText = category.description;
+    document.getElementById('category' + category.id + 'addOption').innerText = category.id + '. ' + category.name;
+    document.getElementById('category' + category.id + 'editOption').innerText = category.id + '. ' + category.name;
+    document.getElementById('category' + category.id + 'deleteOption').innerText = category.id + '. ' + category.name;
+    for (const product of databaseData['products']) {
+        if (product.type.category.id === category.id) {
+            product.type.category = category;
+            document.getElementById('product' + product.id + 'categoryElement').innerText = category.name;
+        }
+    }
+    for (const productType of databaseData['product_types']) {
+        if (productType.category.id === category.id) {
+            productType.category = category;
+            document.getElementById('productType' + productType.id + 'categoryElement').innerText = category.name;
+        }
+    }
+};
+
+const editDomProduct = product => {
+    for (const prod of databaseData['products']) {
+        if (prod.id === product.id) {
+            prod.type = product.type;
+            prod.warehouse = product.warehouse;
+        }
+    }
+    deleteDomProduct(product.id);
+    addProductToDom(product);
+};
+
+const editDomProductType = productType => {
+    for (const type of databaseData['productTypes']) {
+        if (type.id === productType.id) {
+            type.name = productType.name;
+            type.description = productType.description;
+            type.category = productType.category;
+        }
+    }
+    deleteDomProductType(productType.id);
+    addProductTypeToDom(productType);
+    for (const product of databaseData['products']) {
+        if (product.type.id === productType.id) {
+            product.type = productType;
+            document.getElementById('product' + product.id + 'typeElement').innerText = productType.name;
+            document.getElementById('product' + product.id + 'descriptionElement').innerText = productType.description;
+            document.getElementById('product' + product.id + 'categoryElement').innerText = productType.category.name;
+        }
+    }
+};
+
 document.getElementById('radioButtonProducts').addEventListener('change', event => {
     document.getElementById('spacer').style.display = 'block';
     document.getElementById('warehouseList').style.display = 'block';
@@ -523,6 +634,36 @@ document.getElementById('addWarehouseSaveButton').addEventListener('click', even
     .catch(error => console.error(error));
 });
 
+document.getElementById('editWarehouseSaveButton').addEventListener('click', event => {
+    const id = document.getElementById('editWarehouseIdInput').value;
+    const name = document.getElementById('editWarehouseNameInput').value;
+    const description = document.getElementById('editWarehouseDescriptionInput').value;
+
+    fetch(backendUrl + '/warehouses?id=' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description})
+    })
+    .then(data => data.json())
+    .then(dataJson => editDomWarehouse(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('deleteWarehouseButton').addEventListener('click', event => {
+    const id = document.getElementById('deleteWarehouseIdInput').value;
+
+    fetch(backendUrl + '/warehouses?id=' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(() => deleteDomWarehouse(id))
+    .catch(error => console.error(error));
+});
+
 document.getElementById('addProductSaveButton').addEventListener('click', event => {
     const productTypeString = document.getElementById('addProductTypeSelect').value;
     const productWarehouseString = document.getElementById('addProductWarehouseSelect').value;
@@ -559,6 +700,56 @@ document.getElementById('addProductSaveButton').addEventListener('click', event 
     .catch(error => console.error(error));
 });
 
+document.getElementById('editProductSaveButton').addEventListener('click', event => {
+    const productId = document.getElementById('editProductIdInput').value;
+    const productTypeString = document.getElementById('editProductTypeSelect').value;
+    const productWarehouseString = document.getElementById('editProductWarehouseSelect').value;
+
+    const productTypeId = Number(productTypeString.substring(11, productTypeString.length - 9));
+    const productWarehouseId = Number(productWarehouseString.substring(9, productWarehouseString.length - 9));
+
+    let type;
+    let house;
+
+    for (const productType of databaseData['product_types']) {
+        if (productType.id === productTypeId) {
+            type = productType;
+            break;
+        }
+    }
+
+    for (const warehouse of databaseData['warehouses']) {
+        if (warehouse.id === productWarehouseId) {
+            house = warehouse;
+            break;
+        }
+    }
+
+    fetch(backendUrl + '/products?id=' + productId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({type: type, warehouse: house})
+    })
+    .then(data => data.json())
+    .then(dataJson => editDomProduct(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('deleteProductButton').addEventListener('click', event => {
+    const id = document.getElementById('deleteProductIdInput').value;
+
+    fetch(backendUrl + '/products?id=' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(() => deleteDomProduct(id))
+    .catch(error => console.error(error));
+});
+
 document.getElementById('addCategorySaveButton').addEventListener('click', event => {
     const name = document.getElementById('addCategoryNameInput').value;
     const description = document.getElementById('addCategoryDescriptionInput').value;
@@ -572,6 +763,36 @@ document.getElementById('addCategorySaveButton').addEventListener('click', event
     })
     .then(data => data.json())
     .then(dataJson => addCategoryToDom(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('editCategorySaveButton').addEventListener('click', event => {
+    const id = document.getElementById('editCategoryIdInput').value;
+    const name = document.getElementById('editCategoryNameInput').value;
+    const description = document.getElementById('editCategoryDescriptionInput').value;
+
+    fetch(backendUrl + '/product_categories?id=' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description})
+    })
+    .then(data => data.json())
+    .then(dataJson => editDomCategory(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('deleteCategoryButton').addEventListener('click', event => {
+    const id = document.getElementById('deleteCategoryIdInput').value;
+
+    fetch(backendUrl + '/product_categories?id=' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(() => deleteDomCategory(id))
     .catch(error => console.error(error));
 });
 
@@ -603,6 +824,47 @@ document.getElementById('addTypeSaveButton').addEventListener('click', event => 
     .catch(error => console.error(error));
 });
 
+document.getElementById('editTypeSaveButton').addEventListener('click', event => {
+    const id = document.getElementById('editTypeIdInput').value;
+    const name = document.getElementById('editTypeNameInput').value;
+    const description = document.getElementById('editTypeDescriptionInput').value;
+    const categoryString = document.getElementById('editTypeCategorySelect').value;
+
+    const categoryId = Number(categoryString.substring(8, categoryString.length - 9));
+
+    let cat;
+
+    for (const category of databaseData['categories']) {
+        if (category.id === categoryId) {
+            cat = category;
+            break;
+        }
+    }
+
+    fetch(backendUrl + '/product_types?id=' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description, category: cat})
+    })
+    .then(data => data.json())
+    .then(dataJson => editDomProductType(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('deleteTypeButton').addEventListener('click', event => {
+    const id = document.getElementById('deleteTypeIdInput').value;
+
+    fetch(backendUrl + '/product_types?id=' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(() => deleteDomProductType(id))
+    .catch(error => console.error(error));
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const states = ['warehouses', 'product_categories', 'product_types', 'products'];
