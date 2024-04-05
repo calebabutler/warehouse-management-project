@@ -1,8 +1,22 @@
 
+/**
+ * URL used to connect to backend
+ */
 const backendUrl = 'http://localhost:8080';
 
+/**
+ * databaseData, organized as:
+ *   warehouses: [warehouse objects]
+ *   products: [product objects]
+ *   product_types: [product type objects]
+ *   product_categories: [product category objects]
+ */
 const databaseData = {};
 
+/**
+ * When given a warehouse object, add warehouse to databaseData if not there
+ * already, as well as to the DOM
+ */
 const addWarehouseToDom = warehouse => {
     let isInDatabaseData = false;
     for (const house of databaseData['warehouses']) {
@@ -160,6 +174,10 @@ const addWarehouseToDom = warehouse => {
     deleteSelect.appendChild(deleteOption);
 };
 
+/**
+ * When given a product category object, add category to databaseData if not
+ * there already, as well as to the DOM
+ */
 const addCategoryToDom = category => {
     let isInDatabaseData = false;
     for (const cat of databaseData['product_categories']) {
@@ -317,6 +335,10 @@ const addCategoryToDom = category => {
     deleteSelect.appendChild(deleteOption);
 };
 
+/**
+ * When given a product object, add product to databaseData if not there
+ * already, as well as to the DOM
+ */
 const addProductToDom = product => {
     let isInDatabaseData = false;
     for (const prod of databaseData['products']) {
@@ -394,6 +416,10 @@ const addProductToDom = product => {
     buttonGroup.appendChild(deleteButton);
 };
 
+/**
+ * When given a product type object, add product type to databaseData if not
+ * there already, as well as to the DOM
+ */
 const addProductTypeToDom = productType => {
     let isInDatabaseData = false;
     for (const type of databaseData['product_types']) {
@@ -495,6 +521,9 @@ const addProductTypeToDom = productType => {
     deleteSelect.appendChild(deleteOption);
 };
 
+/**
+ * Populate DOM with all objects currently in databaseData.
+ */
 const updateDom = () => {
     for (const warehouse of databaseData['warehouses']) {
         addWarehouseToDom(warehouse);
@@ -509,7 +538,9 @@ const updateDom = () => {
         addProductTypeToDom(productType);
     }
 };
-
+/**
+ * Delete warehouse from DOM.
+ */
 const deleteDomWarehouse = id => {
     document.getElementById('warehouse' + id).remove();
     document.getElementById('warehouse' + id + 'addOption').remove();
@@ -517,6 +548,9 @@ const deleteDomWarehouse = id => {
     document.getElementById('warehouse' + id + 'deleteOption').remove();
 };
 
+/**
+ * Delete product category from DOM.
+ */
 const deleteDomCategory = id => {
     document.getElementById('category' + id).remove();
     document.getElementById('category' + id + 'addOption').remove();
@@ -524,10 +558,16 @@ const deleteDomCategory = id => {
     document.getElementById('category' + id + 'deleteOption').remove();
 };
 
+/**
+ * Delete product from DOM.
+ */
 const deleteDomProduct = id => {
     document.getElementById('product' + id + 'row').remove();
 };
 
+/**
+ * Delete product type from DOM.
+ */
 const deleteDomProductType = id => {
     document.getElementById('productType' + id + 'row').remove();
     document.getElementById('productType' + id + 'addOption').remove();
@@ -535,7 +575,12 @@ const deleteDomProductType = id => {
     document.getElementById('productType' + id + 'deleteOption').remove();
 };
 
+/**
+ * Edit existing DOM objects to reflect changes in warehouse object.
+ */
 const editDomWarehouse = warehouse => {
+    // The function changes databaseData as a workaround, since some callbacks
+    // use these objects unintentionally through closures.
     for (const house of databaseData['warehouses']) {
         if (house.id === warehouse.id) {
             house.name = warehouse.name;
@@ -554,7 +599,12 @@ const editDomWarehouse = warehouse => {
     document.getElementById('warehouse' + warehouse.id + 'deleteOption').innerText = warehouse.id + '. ' + warehouse.name;
 };
 
+/**
+ * Edit existing DOM objects to reflect changes in product category object.
+ */
 const editDomCategory = category => {
+    // The function changes databaseData as a workaround, since some callbacks
+    // use these objects unintentionally through closures.
     for (const cat of databaseData['product_categories']) {
         if (cat.id === category.id) {
             cat.name = category.name;
@@ -590,7 +640,12 @@ const editDomCategory = category => {
     }
 };
 
+/**
+ * Edit existing DOM objects to reflect changes in product object.
+ */
 const editDomProduct = product => {
+    // The function changes databaseData as a workaround, since some callbacks
+    // use these objects unintentionally through closures.
     for (const prod of databaseData['products']) {
         if (prod.id === product.id) {
             prod.type = product.type;
@@ -601,7 +656,12 @@ const editDomProduct = product => {
     addProductToDom(product);
 };
 
+/**
+ * Edit existing DOM objects to reflect changes in product type object.
+ */
 const editDomProductType = productType => {
+    // The function changes databaseData as a workaround, since some callbacks
+    // use these objects unintentionally through closures.
     for (const type of databaseData['productTypes']) {
         if (type.id === productType.id) {
             type.name = productType.name;
@@ -621,6 +681,7 @@ const editDomProductType = productType => {
     }
 };
 
+// This is a callback function for the "Products" radio button
 document.getElementById('radioButtonProducts').addEventListener('change', event => {
     document.getElementById('spacer').style.display = 'block';
     document.getElementById('warehouseList').style.display = 'block';
@@ -631,6 +692,8 @@ document.getElementById('radioButtonProducts').addEventListener('change', event 
     document.getElementById('addCategoryButton').style.display = 'none';
 });
 
+
+// This is a callback function for the "Product Types" radio button
 document.getElementById('radioButtonProductTypes').addEventListener('change', event => {
     document.getElementById('spacer').style.display = 'none';
     document.getElementById('warehouseList').style.display = 'none';
@@ -641,27 +704,33 @@ document.getElementById('radioButtonProductTypes').addEventListener('change', ev
     document.getElementById('addCategoryButton').style.display = 'block';
 });
 
+// This is a callback function for the "Add a Product" button
 document.getElementById('addProductButton').addEventListener('click', event => {
     document.getElementById('addProductTypeSelect').value = 'productType1addOption';
     document.getElementById('addProductWarehouseSelect').value = 'warehouse1addOption';
 });
 
+// This is a callback function for the "Add a Warehouse" button
 document.getElementById('addWarehouseButton').addEventListener('click', event => {
     document.getElementById('addWarehouseNameInput').value = '';
     document.getElementById('addWarehouseDescriptionInput').value = '';
 });
 
+// This is a callback function for the "Add a Product Type" button
 document.getElementById('addTypeButton').addEventListener('click', event => {
     document.getElementById('addTypeNameInput').value = '';
     document.getElementById('addTypeDescriptionInput').value = '';
     document.getElementById('addTypeCategorySelect').value = 'category1addOption';
 });
 
+// This is a callback function for the "Add a Product Category" button
 document.getElementById('addCategoryButton').addEventListener('click', event => {
     document.getElementById('addCategoryNameInput').value = '';
     document.getElementById('addCategoryDescriptionInput').value = '';
 });
 
+// This is a callback function for the "Save" button on the "Add a Warehouse"
+// modal.
 document.getElementById('addWarehouseSaveButton').addEventListener('click', event => {
     const name = document.getElementById('addWarehouseNameInput').value;
     const description = document.getElementById('addWarehouseDescriptionInput').value;
@@ -686,6 +755,8 @@ document.getElementById('addWarehouseSaveButton').addEventListener('click', even
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Edit Warehouse"
+// modal.
 document.getElementById('editWarehouseSaveButton').addEventListener('click', event => {
     const id = document.getElementById('editWarehouseIdInput').value;
     const name = document.getElementById('editWarehouseNameInput').value;
@@ -711,6 +782,8 @@ document.getElementById('editWarehouseSaveButton').addEventListener('click', eve
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Delete" button on the "Delete Warehouse"
+// modal.
 document.getElementById('deleteWarehouseButton').addEventListener('click', event => {
     const id = document.getElementById('deleteWarehouseIdInput').value;
 
@@ -730,6 +803,8 @@ document.getElementById('deleteWarehouseButton').addEventListener('click', event
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Add a Product"
+// modal.
 document.getElementById('addProductSaveButton').addEventListener('click', event => {
     const productTypeString = document.getElementById('addProductTypeSelect').value;
     const productWarehouseString = document.getElementById('addProductWarehouseSelect').value;
@@ -774,6 +849,8 @@ document.getElementById('addProductSaveButton').addEventListener('click', event 
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Edit Product"
+// modal.
 document.getElementById('editProductSaveButton').addEventListener('click', event => {
     const productId = document.getElementById('editProductIdInput').value;
     const productTypeString = document.getElementById('editProductTypeSelect').value;
@@ -819,6 +896,8 @@ document.getElementById('editProductSaveButton').addEventListener('click', event
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Delete" button on the "Delete Product"
+// modal.
 document.getElementById('deleteProductButton').addEventListener('click', event => {
     const id = document.getElementById('deleteProductIdInput').value;
 
@@ -838,6 +917,8 @@ document.getElementById('deleteProductButton').addEventListener('click', event =
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Add a Product
+// Category" modal.
 document.getElementById('addCategorySaveButton').addEventListener('click', event => {
     const name = document.getElementById('addCategoryNameInput').value;
     const description = document.getElementById('addCategoryDescriptionInput').value;
@@ -862,6 +943,8 @@ document.getElementById('addCategorySaveButton').addEventListener('click', event
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Edit Product
+// Category" modal.
 document.getElementById('editCategorySaveButton').addEventListener('click', event => {
     const id = document.getElementById('editCategoryIdInput').value;
     const name = document.getElementById('editCategoryNameInput').value;
@@ -887,6 +970,8 @@ document.getElementById('editCategorySaveButton').addEventListener('click', even
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Delete" button on the "Delete Product
+// Category" modal.
 document.getElementById('deleteCategoryButton').addEventListener('click', event => {
     const id = document.getElementById('deleteCategoryIdInput').value;
 
@@ -906,6 +991,8 @@ document.getElementById('deleteCategoryButton').addEventListener('click', event 
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Add a Product
+// Type" modal.
 document.getElementById('addTypeSaveButton').addEventListener('click', event => {
     const name = document.getElementById('addTypeNameInput').value;
     const description = document.getElementById('addTypeDescriptionInput').value;
@@ -942,6 +1029,8 @@ document.getElementById('addTypeSaveButton').addEventListener('click', event => 
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Save" button on the "Edit Product
+// Type" modal.
 document.getElementById('editTypeSaveButton').addEventListener('click', event => {
     const id = document.getElementById('editTypeIdInput').value;
     const name = document.getElementById('editTypeNameInput').value;
@@ -979,6 +1068,8 @@ document.getElementById('editTypeSaveButton').addEventListener('click', event =>
     .catch(error => console.error(error));
 });
 
+// This is a callback function for the "Delete" button on the "Delete Product
+// Type" modal.
 document.getElementById('deleteTypeButton').addEventListener('click', event => {
     const id = document.getElementById('deleteTypeIdInput').value;
 
@@ -998,6 +1089,8 @@ document.getElementById('deleteTypeButton').addEventListener('click', event => {
     .catch(error => console.error(error));
 });
 
+// This is a callback function called when the DOM is loaded. It gets all data
+// from the server and stores it in the databaseData object.
 document.addEventListener('DOMContentLoaded', () => {
     const states = ['warehouses', 'product_categories', 'product_types', 'products'];
     for (const state of states) {
