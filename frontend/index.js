@@ -534,14 +534,14 @@ document.getElementById('addProductSaveButton').addEventListener('click', event 
     let house;
 
     for (const productType of databaseData['product_types']) {
-        if (productType.id = productTypeId) {
+        if (productType.id === productTypeId) {
             type = productType;
             break;
         }
     }
 
     for (const warehouse of databaseData['warehouses']) {
-        if (warehouse.id = productWarehouseId) {
+        if (warehouse.id === productWarehouseId) {
             house = warehouse;
             break;
         }
@@ -585,7 +585,7 @@ document.getElementById('addTypeSaveButton').addEventListener('click', event => 
     let cat;
 
     for (const category of databaseData['categories']) {
-        if (category.id = categoryId) {
+        if (category.id === categoryId) {
             cat = category;
             break;
         }
