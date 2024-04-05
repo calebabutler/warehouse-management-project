@@ -14,6 +14,15 @@ public class ProductTypeService extends BaseService<ProductType> {
         return type.getId() == null && type.getName() != null && type.getDescription() != null && type.getCategory() != null;
     }
 
+    @Override
+    public boolean isValidForUpdate(Integer id, ProductType type) {
+        if (id != null && type.getId() == null && type.getCategory() != null) {
+            type.setId(id);
+            return true;
+        }
+        return false;
+    }
+
     @Autowired
     void setRepository(ProductTypeRepository repository) {
         this.repository = repository;

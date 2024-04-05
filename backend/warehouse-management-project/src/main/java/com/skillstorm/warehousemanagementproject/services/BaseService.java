@@ -9,14 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public abstract class BaseService<T> {
 
-    private interface ObjectWithId {
-        public Integer getId();
-        public void setId(Integer id);
-    }
-
     protected JpaRepository<T, Integer> repository;
 
     public abstract boolean isValidForCreate(T object);
+    public abstract boolean isValidForUpdate(Integer id, T object);
     // Make sure to also implement setRepository, and make it Autowired!
 
     public Optional<T> create(T object) {
@@ -34,9 +30,7 @@ public abstract class BaseService<T> {
     }
 
     public Optional<T> update(int id, T object) {
-        ObjectWithId objectWithId = (ObjectWithId) object;
-        if (object != null && objectWithId.getId() == null) {
-            objectWithId.setId(id);
+        if (object != null && isValidForUpdate(id, object)) {
             return Optional.of(repository.save(object));
         }
         return Optional.empty();

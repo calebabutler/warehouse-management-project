@@ -14,6 +14,15 @@ public class ProductCategoryService extends BaseService<ProductCategory> {
         return category.getId() == null && category.getName() != null && category.getDescription() != null;
     }
 
+    @Override
+    public boolean isValidForUpdate(Integer id, ProductCategory category) {
+        if (id != null && category.getId() == null) {
+            category.setId(id);
+            return true;
+        }
+        return false;
+    }
+
     @Autowired
     void setRepository(ProductCategoryRepository repository) {
         this.repository = repository;

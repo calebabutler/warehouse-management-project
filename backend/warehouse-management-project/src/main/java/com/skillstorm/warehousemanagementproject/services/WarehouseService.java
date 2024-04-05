@@ -14,6 +14,15 @@ public class WarehouseService extends BaseService<Warehouse> {
         return warehouse.getId() == null && warehouse.getName() != null && warehouse.getDescription() != null;
     }
 
+    @Override
+    public boolean isValidForUpdate(Integer id, Warehouse warehouse) {
+        if (id != null && warehouse.getId() == null) {
+            warehouse.setId(id);
+            return true;
+        }
+        return false;
+    }
+
     @Autowired
     void setRepository(WarehouseRepository repository) {
         this.repository = repository;

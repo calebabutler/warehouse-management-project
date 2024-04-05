@@ -4,6 +4,17 @@ const backendUrl = 'http://localhost:8080';
 const databaseData = {};
 
 const addWarehouseToDom = warehouse => {
+    let isInDatabaseData = false;
+    for (const house of databaseData['warehouses']) {
+        if (warehouse.id === house.id) {
+            isInDatabaseData = true;
+            break;
+        }
+    }
+    if (!isInDatabaseData) {
+        databaseData['warehouses'].push(warehouse);
+    }
+
     const root = document.getElementById('warehouseList');
 
     const item = document.createElement('div');
@@ -150,6 +161,17 @@ const addWarehouseToDom = warehouse => {
 };
 
 const addCategoryToDom = category => {
+    let isInDatabaseData = false;
+    for (const cat of databaseData['product_categories']) {
+        if (category.id === cat.id) {
+            isInDatabaseData = true;
+            break;
+        }
+    }
+    if (!isInDatabaseData) {
+        databaseData['product_categories'].push(category);
+    }
+
     const root = document.getElementById('categoryList');
 
     const item = document.createElement('div');
@@ -296,6 +318,17 @@ const addCategoryToDom = category => {
 };
 
 const addProductToDom = product => {
+    let isInDatabaseData = false;
+    for (const prod of databaseData['products']) {
+        if (product.id === prod.id) {
+            isInDatabaseData = true;
+            break;
+        }
+    }
+    if (!isInDatabaseData) {
+        databaseData['products'].push(product);
+    }
+
     const root = document.getElementById('warehouse' + product.warehouse.id + 'products');
 
     const row = document.createElement('tr');
@@ -362,6 +395,17 @@ const addProductToDom = product => {
 };
 
 const addProductTypeToDom = productType => {
+    let isInDatabaseData = false;
+    for (const type of databaseData['product_types']) {
+        if (productType.id === type.id) {
+            isInDatabaseData = true;
+            break;
+        }
+    }
+    if (!isInDatabaseData) {
+        databaseData['product_types'].push(productType);
+    }
+
     const root = document.getElementById('category' + productType.category.id + 'productTypes');
 
     const row = document.createElement('tr');
@@ -511,13 +555,13 @@ const editDomWarehouse = warehouse => {
 };
 
 const editDomCategory = category => {
-    for (const cat of databaseData['categories']) {
+    for (const cat of databaseData['product_categories']) {
         if (cat.id === category.id) {
             cat.name = category.name;
             cat.description = category.description;
         }
     }
-    for (const type of databaseData['productTypes']) {
+    for (const type of databaseData['product_types']) {
         if (type.category.id === category.id) {
             type.category = category;
         }
@@ -622,14 +666,22 @@ document.getElementById('addWarehouseSaveButton').addEventListener('click', even
     const name = document.getElementById('addWarehouseNameInput').value;
     const description = document.getElementById('addWarehouseDescriptionInput').value;
 
+    const body = JSON.stringify({name: name, description: description});
+    console.log(body);
+
     fetch(backendUrl + '/warehouses', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => addWarehouseToDom(dataJson))
     .catch(error => console.error(error));
 });
@@ -639,14 +691,22 @@ document.getElementById('editWarehouseSaveButton').addEventListener('click', eve
     const name = document.getElementById('editWarehouseNameInput').value;
     const description = document.getElementById('editWarehouseDescriptionInput').value;
 
+    const body = JSON.stringify({name: name, description: description});
+    console.log(body);
+
     fetch(backendUrl + '/warehouses?id=' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => editDomWarehouse(dataJson))
     .catch(error => console.error(error));
 });
@@ -654,13 +714,19 @@ document.getElementById('editWarehouseSaveButton').addEventListener('click', eve
 document.getElementById('deleteWarehouseButton').addEventListener('click', event => {
     const id = document.getElementById('deleteWarehouseIdInput').value;
 
-    fetch(backendUrl + '/warehouses?id=' + id, {
+    const promise = fetch(backendUrl + '/warehouses?id=' + id, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    .then(() => deleteDomWarehouse(id))
+    .then(data => {
+        if (data.status === 204) {
+            deleteDomWarehouse(id)
+        } else {
+            throw 'Server did not delete.'
+        }
+    })
     .catch(error => console.error(error));
 });
 
@@ -688,14 +754,22 @@ document.getElementById('addProductSaveButton').addEventListener('click', event 
         }
     }
 
+    const body = JSON.stringify({type: type, warehouse: house});
+    console.log(body);
+
     fetch(backendUrl + '/products', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({type: type, warehouse: house})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => addProductToDom(dataJson))
     .catch(error => console.error(error));
 });
@@ -705,8 +779,8 @@ document.getElementById('editProductSaveButton').addEventListener('click', event
     const productTypeString = document.getElementById('editProductTypeSelect').value;
     const productWarehouseString = document.getElementById('editProductWarehouseSelect').value;
 
-    const productTypeId = Number(productTypeString.substring(11, productTypeString.length - 9));
-    const productWarehouseId = Number(productWarehouseString.substring(9, productWarehouseString.length - 9));
+    const productTypeId = Number(productTypeString.substring(11, productTypeString.length - 10));
+    const productWarehouseId = Number(productWarehouseString.substring(9, productWarehouseString.length - 10));
 
     let type;
     let house;
@@ -725,14 +799,22 @@ document.getElementById('editProductSaveButton').addEventListener('click', event
         }
     }
 
+    const body = JSON.stringify({type: type, warehouse: house});
+    console.log(body);
+
     fetch(backendUrl + '/products?id=' + productId, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({type: type, warehouse: house})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => editDomProduct(dataJson))
     .catch(error => console.error(error));
 });
@@ -746,7 +828,13 @@ document.getElementById('deleteProductButton').addEventListener('click', event =
             'Content-Type': 'application/json'
         }
     })
-    .then(() => deleteDomProduct(id))
+    .then(data => {
+        if (data.status === 204) {
+            deleteDomProduct(id);
+        } else {
+            throw 'Server did not delete.'
+        }
+    })
     .catch(error => console.error(error));
 });
 
@@ -754,14 +842,22 @@ document.getElementById('addCategorySaveButton').addEventListener('click', event
     const name = document.getElementById('addCategoryNameInput').value;
     const description = document.getElementById('addCategoryDescriptionInput').value;
 
+    const body = JSON.stringify({name: name, description: description});
+    console.log(body);
+
     fetch(backendUrl + '/product_categories', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => addCategoryToDom(dataJson))
     .catch(error => console.error(error));
 });
@@ -771,14 +867,22 @@ document.getElementById('editCategorySaveButton').addEventListener('click', even
     const name = document.getElementById('editCategoryNameInput').value;
     const description = document.getElementById('editCategoryDescriptionInput').value;
 
+    const body = JSON.stringify({name: name, description: description});
+    console.log(body);
+
     fetch(backendUrl + '/product_categories?id=' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => editDomCategory(dataJson))
     .catch(error => console.error(error));
 });
@@ -792,7 +896,13 @@ document.getElementById('deleteCategoryButton').addEventListener('click', event 
             'Content-Type': 'application/json'
         }
     })
-    .then(() => deleteDomCategory(id))
+    .then(data => {
+        if (data.status === 204) {
+            deleteDomCategory(id);
+        } else {
+            throw 'Server did not delete.'
+        }
+    })
     .catch(error => console.error(error));
 });
 
@@ -805,21 +915,29 @@ document.getElementById('addTypeSaveButton').addEventListener('click', event => 
 
     let cat;
 
-    for (const category of databaseData['categories']) {
+    for (const category of databaseData['product_categories']) {
         if (category.id === categoryId) {
             cat = category;
             break;
         }
     }
 
+    const body = JSON.stringify({name: name, description: description, category: cat});
+    console.log(body);
+
     fetch(backendUrl + '/product_types', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description, category: cat})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => addProductTypeToDom(dataJson))
     .catch(error => console.error(error));
 });
@@ -830,25 +948,33 @@ document.getElementById('editTypeSaveButton').addEventListener('click', event =>
     const description = document.getElementById('editTypeDescriptionInput').value;
     const categoryString = document.getElementById('editTypeCategorySelect').value;
 
-    const categoryId = Number(categoryString.substring(8, categoryString.length - 9));
+    const categoryId = Number(categoryString.substring(8, categoryString.length - 10));
 
     let cat;
 
-    for (const category of databaseData['categories']) {
+    for (const category of databaseData['product_categories']) {
         if (category.id === categoryId) {
             cat = category;
             break;
         }
     }
 
+    const body = JSON.stringify({name: name, description: description, category: cat});
+    console.log(body);
+
     fetch(backendUrl + '/product_types?id=' + id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: name, description: description, category: cat})
+        body: body
     })
-    .then(data => data.json())
+    .then(data => {
+        if (data.ok) {
+            return data.json();
+        }
+        throw 'Did not receive ok from server.';
+    })
     .then(dataJson => editDomProductType(dataJson))
     .catch(error => console.error(error));
 });
@@ -862,7 +988,13 @@ document.getElementById('deleteTypeButton').addEventListener('click', event => {
             'Content-Type': 'application/json'
         }
     })
-    .then(() => deleteDomProductType(id))
+    .then(data => {
+        if (data.status === 204) {
+            deleteDomProductType(id);
+        } else {
+            throw 'Server did not delete.'
+        }
+    })
     .catch(error => console.error(error));
 });
 
