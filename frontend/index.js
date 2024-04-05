@@ -662,7 +662,7 @@ const editDomProduct = product => {
 const editDomProductType = productType => {
     // The function changes databaseData as a workaround, since some callbacks
     // use these objects unintentionally through closures.
-    for (const type of databaseData['productTypes']) {
+    for (const type of databaseData['product_types']) {
         if (type.id === productType.id) {
             type.name = productType.name;
             type.description = productType.description;
