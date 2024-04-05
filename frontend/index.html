@@ -349,8 +349,11 @@
 
     <main>
         <div class="container-xxl d-grid gap-2" id="warehouseObject">
-            <div></div>
+            <div id="spacer"></div>
             <div class="accordion" id="warehouseList">
+            </div>
+            <div class="row">
+                <button type="button" id="addProductButton" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addProductModal">Add a Product</button>
             </div>
             <div class="row">
                 <button type="button" id="addWarehouseButton" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">Add a Warehouse</button>
@@ -359,6 +362,9 @@
 
         <div class="container-xxl d-grid gap-2" id="categoryObject">
             <div class="accordion" id="categoryList" style="display:none;">
+            </div>
+            <div class="row">
+                <button type="button" id="addTypeButton" class="btn btn-dark" style="display:none;" data-bs-toggle="modal" data-bs-target="#addTypeModal">Add a Product Type</button>
             </div>
             <div class="row">
                 <button type="button" class="btn btn-dark" id="addCategoryButton" style="display:none;" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add a Category</button>

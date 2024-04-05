@@ -126,23 +126,6 @@ const addWarehouseToDom = warehouse => {
     products.id = 'warehouse' + warehouse.id + 'products';
     productsTable.append(products);
 
-    const addProductsRow = document.createElement('div');
-    addProductsRow.className = 'row';
-    addProductsRow.id = 'warehouse' + warehouse.id + 'addProductsRow';
-    body.appendChild(addProductsRow);
-
-    const addProducts = document.createElement('button');
-    addProducts.className = 'btn btn-dark';
-    addProducts.id = 'warehouse' + warehouse.id + 'addProducts';
-    addProducts.innerText = 'Add a Product';
-    addProducts.setAttribute('data-bs-toggle', 'modal');
-    addProducts.setAttribute('data-bs-target', '#addProductModal');
-    addProducts.addEventListener('click', event => {
-        document.getElementById('addProductTypeSelect').value = 'productType1addOption';
-        document.getElementById('addProductWarehouseSelect').value = 'warehouse1addOption';
-    });
-    addProductsRow.appendChild(addProducts);
-
     const addSelect = document.getElementById('addProductWarehouseSelect');
     const editSelect = document.getElementById('editProductWarehouseSelect');
     const deleteSelect = document.getElementById('deleteProductWarehouseSelect');
@@ -288,24 +271,6 @@ const addCategoryToDom = category => {
     const products = document.createElement('tbody');
     products.id = 'category' + category.id + 'productTypes';
     productsTable.append(products);
-
-    const addProductsRow = document.createElement('div');
-    addProductsRow.className = 'row';
-    addProductsRow.id = 'category' + category.id + 'addProductsRow';
-    body.appendChild(addProductsRow);
-
-    const addProductTypes = document.createElement('button');
-    addProductTypes.className = 'btn btn-dark';
-    addProductTypes.id = 'category' + category.id + 'addProductTypes';
-    addProductTypes.innerText = 'Add a Product Type';
-    addProductTypes.setAttribute('data-bs-toggle', 'modal');
-    addProductTypes.setAttribute('data-bs-target', '#addTypeModal');
-    addProductTypes.addEventListener('click', event => {
-        document.getElementById('addTypeNameInput').value = '';
-        document.getElementById('addTypeDescriptionInput').value = '';
-        document.getElementById('addTypeCategorySelect').value = 'category1addOption';
-    });
-    addProductsRow.appendChild(addProductTypes);
 
     const addSelect = document.getElementById('addTypeCategorySelect');
     const editSelect = document.getElementById('editTypeCategorySelect');
@@ -502,22 +467,39 @@ const updateDom = () => {
 };
 
 document.getElementById('radioButtonProducts').addEventListener('change', event => {
+    document.getElementById('spacer').style.display = 'block';
     document.getElementById('warehouseList').style.display = 'block';
+    document.getElementById('addProductButton').style.display = 'block';
     document.getElementById('addWarehouseButton').style.display = 'block';
     document.getElementById('categoryList').style.display = 'none';
+    document.getElementById('addTypeButton').style.display = 'none';
     document.getElementById('addCategoryButton').style.display = 'none';
 });
 
 document.getElementById('radioButtonProductTypes').addEventListener('change', event => {
+    document.getElementById('spacer').style.display = 'none';
     document.getElementById('warehouseList').style.display = 'none';
+    document.getElementById('addProductButton').style.display = 'none';
     document.getElementById('addWarehouseButton').style.display = 'none';
     document.getElementById('categoryList').style.display = 'block';
+    document.getElementById('addTypeButton').style.display = 'block';
     document.getElementById('addCategoryButton').style.display = 'block';
+});
+
+document.getElementById('addProductButton').addEventListener('click', event => {
+    document.getElementById('addProductTypeSelect').value = 'productType1addOption';
+    document.getElementById('addProductWarehouseSelect').value = 'warehouse1addOption';
 });
 
 document.getElementById('addWarehouseButton').addEventListener('click', event => {
     document.getElementById('addWarehouseNameInput').value = '';
     document.getElementById('addWarehouseDescriptionInput').value = '';
+});
+
+document.getElementById('addTypeButton').addEventListener('click', event => {
+    document.getElementById('addTypeNameInput').value = '';
+    document.getElementById('addTypeDescriptionInput').value = '';
+    document.getElementById('addTypeCategorySelect').value = 'category1addOption';
 });
 
 document.getElementById('addCategoryButton').addEventListener('click', event => {
@@ -541,6 +523,42 @@ document.getElementById('addWarehouseSaveButton').addEventListener('click', even
     .catch(error => console.error(error));
 });
 
+document.getElementById('addProductSaveButton').addEventListener('click', event => {
+    const productTypeString = document.getElementById('addProductTypeSelect').value;
+    const productWarehouseString = document.getElementById('addProductWarehouseSelect').value;
+
+    const productTypeId = Number(productTypeString.substring(11, productTypeString.length - 9));
+    const productWarehouseId = Number(productWarehouseString.substring(9, productWarehouseString.length - 9));
+
+    let type;
+    let house;
+
+    for (const productType of databaseData['product_types']) {
+        if (productType.id = productTypeId) {
+            type = productType;
+            break;
+        }
+    }
+
+    for (const warehouse of databaseData['warehouses']) {
+        if (warehouse.id = productWarehouseId) {
+            house = warehouse;
+            break;
+        }
+    }
+
+    fetch(backendUrl + '/products', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({type: type, warehouse: house})
+    })
+    .then(data => data.json())
+    .then(dataJson => addProductToDom(dataJson))
+    .catch(error => console.error(error));
+});
+
 document.getElementById('addCategorySaveButton').addEventListener('click', event => {
     const name = document.getElementById('addCategoryNameInput').value;
     const description = document.getElementById('addCategoryDescriptionInput').value;
@@ -556,6 +574,35 @@ document.getElementById('addCategorySaveButton').addEventListener('click', event
     .then(dataJson => addCategoryToDom(dataJson))
     .catch(error => console.error(error));
 });
+
+document.getElementById('addTypeSaveButton').addEventListener('click', event => {
+    const name = document.getElementById('addTypeNameInput').value;
+    const description = document.getElementById('addTypeDescriptionInput').value;
+    const categoryString = document.getElementById('addTypeCategorySelect').value;
+
+    const categoryId = Number(categoryString.substring(8, categoryString.length - 9));
+
+    let cat;
+
+    for (const category of databaseData['categories']) {
+        if (category.id = categoryId) {
+            cat = category;
+            break;
+        }
+    }
+
+    fetch(backendUrl + '/product_types', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description, category: cat})
+    })
+    .then(data => data.json())
+    .then(dataJson => addProductTypeToDom(dataJson))
+    .catch(error => console.error(error));
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const states = ['warehouses', 'product_categories', 'product_types', 'products'];
