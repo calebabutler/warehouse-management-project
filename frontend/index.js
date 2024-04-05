@@ -3,397 +3,558 @@ const backendUrl = 'http://localhost:8080';
 
 const databaseData = {};
 
-const addWarehousesToDom = () => {
+const addWarehouseToDom = warehouse => {
     const root = document.getElementById('warehouseList');
-    for (const warehouse of databaseData['warehouses']) {
-        const item = document.createElement('div');
-        item.className = 'accordion-item';
-        item.id = 'warehouse' + warehouse.id;
-        root.appendChild(item);
 
-        const header = document.createElement('h2');
-        header.className = 'accordion-header';
-        header.id = 'warehouse' + warehouse.id + 'header';
-        item.appendChild(header);
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+    item.id = 'warehouse' + warehouse.id;
+    root.appendChild(item);
 
-        const button = document.createElement('button');
-        button.className = 'accordion-button collapsed';
-        button.id = 'warehouse' + warehouse.id + 'button';
-        button.type = 'button';
-        button.setAttribute('data-bs-toggle', 'collapse');
-        button.setAttribute('data-bs-target', '#warehouse' + warehouse.id + 'collapse');
-        button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-controls', 'warehouse' + warehouse.id + 'collapse');
-        button.innerText = warehouse.id + '. ' + warehouse.name;
-        header.appendChild(button);
+    const header = document.createElement('h2');
+    header.className = 'accordion-header';
+    header.id = 'warehouse' + warehouse.id + 'header';
+    item.appendChild(header);
 
-        const collapse = document.createElement('div');
-        collapse.className = 'accordion-collapse collapse';
-        collapse.id = 'warehouse' + warehouse.id + 'collapse';
-        collapse.setAttribute('data-bs-parent', '#warehouseList');
-        item.appendChild(collapse);
+    const button = document.createElement('button');
+    button.className = 'accordion-button collapsed';
+    button.id = 'warehouse' + warehouse.id + 'button';
+    button.type = 'button';
+    button.setAttribute('data-bs-toggle', 'collapse');
+    button.setAttribute('data-bs-target', '#warehouse' + warehouse.id + 'collapse');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', 'warehouse' + warehouse.id + 'collapse');
+    button.innerText = warehouse.id + '. ' + warehouse.name;
+    header.appendChild(button);
 
-        const body = document.createElement('div');
-        body.className = 'accordion-body d-grid gap-2';
-        body.id = 'warehouse' + warehouse.id + 'body';
-        collapse.appendChild(body);
+    const collapse = document.createElement('div');
+    collapse.className = 'accordion-collapse collapse';
+    collapse.id = 'warehouse' + warehouse.id + 'collapse';
+    collapse.setAttribute('data-bs-parent', '#warehouseList');
+    item.appendChild(collapse);
 
-        const row = document.createElement('div');
-        row.className = 'row align-items-center';
-        row.id = 'warehouse' + warehouse.id + 'row';
-        body.appendChild(row);
+    const body = document.createElement('div');
+    body.className = 'accordion-body d-grid gap-2';
+    body.id = 'warehouse' + warehouse.id + 'body';
+    collapse.appendChild(body);
 
-        const description = document.createElement('div');
-        description.className = 'col-8';
-        description.id = 'warehouse' + warehouse.id + 'description';
-        description.innerText = warehouse.description;
-        row.appendChild(description);
+    const row = document.createElement('div');
+    row.className = 'row align-items-center';
+    row.id = 'warehouse' + warehouse.id + 'row';
+    body.appendChild(row);
 
-        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'col-4 btn-group';
-        buttonGroup.id = 'warehouse' + warehouse.id + 'buttonGroup';
-        buttonGroup.role = 'group';
-        buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
-        row.appendChild(buttonGroup);
+    const description = document.createElement('div');
+    description.className = 'col-8';
+    description.id = 'warehouse' + warehouse.id + 'description';
+    description.innerText = warehouse.description;
+    row.appendChild(description);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'btn btn-primary btn';
-        editButton.id = 'warehouse' + warehouse.id + 'editButton';
-        editButton.innerText = 'Edit';
-        editButton.setAttribute('data-bs-toggle', 'modal');
-        editButton.setAttribute('data-bs-target', '#editWarehouseModal');
-        buttonGroup.appendChild(editButton);
+    const buttonGroup = document.createElement('div');
+    buttonGroup.className = 'col-4 btn-group';
+    buttonGroup.id = 'warehouse' + warehouse.id + 'buttonGroup';
+    buttonGroup.role = 'group';
+    buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
+    row.appendChild(buttonGroup);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-primary btn';
-        deleteButton.id = 'warehouse' + warehouse.id + 'deleteButton';
-        deleteButton.innerText = 'Delete';
-        deleteButton.setAttribute('data-bs-toggle', 'modal');
-        deleteButton.setAttribute('data-bs-target', '#deleteWarehouseModal');
-        buttonGroup.appendChild(deleteButton);
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'btn btn-primary btn';
+    editButton.id = 'warehouse' + warehouse.id + 'editButton';
+    editButton.innerText = 'Edit';
+    editButton.setAttribute('data-bs-toggle', 'modal');
+    editButton.setAttribute('data-bs-target', '#editWarehouseModal');
+    editButton.addEventListener('click', event => {
+        document.getElementById('editWarehouseIdInput').value = warehouse.id;
+        document.getElementById('editWarehouseNameInput').value = warehouse.name;
+        document.getElementById('editWarehouseDescriptionInput').value = warehouse.description;
+    });
+    buttonGroup.appendChild(editButton);
 
-        const productsTable = document.createElement('table');
-        productsTable.className = 'table';
-        productsTable.id = 'warehouse' + warehouse.id + 'productsTable';
-        body.appendChild(productsTable);
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-primary btn';
+    deleteButton.id = 'warehouse' + warehouse.id + 'deleteButton';
+    deleteButton.innerText = 'Delete';
+    deleteButton.setAttribute('data-bs-toggle', 'modal');
+    deleteButton.setAttribute('data-bs-target', '#deleteWarehouseModal');
+    deleteButton.addEventListener('click', event => {
+        document.getElementById('deleteWarehouseIdInput').value = warehouse.id;
+        document.getElementById('deleteWarehouseNameInput').value = warehouse.name;
+        document.getElementById('deleteWarehouseDescriptionInput').value = warehouse.description;
+    });
+    buttonGroup.appendChild(deleteButton);
 
-        const productsHead = document.createElement('thead');
-        productsHead.id = 'warehouse' + warehouse.id + 'productsHead';
-        productsTable.appendChild(productsHead);
+    const productsTable = document.createElement('table');
+    productsTable.className = 'table';
+    productsTable.id = 'warehouse' + warehouse.id + 'productsTable';
+    body.appendChild(productsTable);
 
-        const headerRow = document.createElement('tr');
-        headerRow.id = 'warehouse' + warehouse.id + 'headerRow';
-        productsHead.appendChild(headerRow);
+    const productsHead = document.createElement('thead');
+    productsHead.id = 'warehouse' + warehouse.id + 'productsHead';
+    productsTable.appendChild(productsHead);
 
-        const idHeader = document.createElement('th');
-        idHeader.id = 'warehouse' + warehouse.id + 'idHeader';
-        idHeader.innerText = 'Product id';
-        headerRow.appendChild(idHeader);
+    const headerRow = document.createElement('tr');
+    headerRow.id = 'warehouse' + warehouse.id + 'headerRow';
+    productsHead.appendChild(headerRow);
 
-        const typeHeader = document.createElement('th');
-        typeHeader.id = 'warehouse' + warehouse.id + 'typeHeader';
-        typeHeader.innerText = 'Type';
-        headerRow.appendChild(typeHeader);
+    const idHeader = document.createElement('th');
+    idHeader.id = 'warehouse' + warehouse.id + 'idHeader';
+    idHeader.innerText = 'Product id';
+    headerRow.appendChild(idHeader);
 
-        const descriptionHeader = document.createElement('th');
-        descriptionHeader.id = 'warehouse' + warehouse.id + 'descriptionHeader';
-        descriptionHeader.innerText = 'Description';
-        headerRow.appendChild(descriptionHeader);
+    const typeHeader = document.createElement('th');
+    typeHeader.id = 'warehouse' + warehouse.id + 'typeHeader';
+    typeHeader.innerText = 'Type';
+    headerRow.appendChild(typeHeader);
 
-        const categoryHeader = document.createElement('th');
-        categoryHeader.id = 'warehouse' + warehouse.id + 'categoryHeader';
-        categoryHeader.innerText = 'Category';
-        headerRow.appendChild(categoryHeader);
+    const descriptionHeader = document.createElement('th');
+    descriptionHeader.id = 'warehouse' + warehouse.id + 'descriptionHeader';
+    descriptionHeader.innerText = 'Description';
+    headerRow.appendChild(descriptionHeader);
 
-        const optionsHeader = document.createElement('th');
-        optionsHeader.id = 'warehouse' + warehouse.id + 'optionsHeader';
-        optionsHeader.innerText = 'Options';
-        headerRow.appendChild(optionsHeader);
+    const categoryHeader = document.createElement('th');
+    categoryHeader.id = 'warehouse' + warehouse.id + 'categoryHeader';
+    categoryHeader.innerText = 'Category';
+    headerRow.appendChild(categoryHeader);
 
-        const products = document.createElement('tbody');
-        products.id = 'warehouse' + warehouse.id + 'products';
-        productsTable.append(products);
+    const optionsHeader = document.createElement('th');
+    optionsHeader.id = 'warehouse' + warehouse.id + 'optionsHeader';
+    optionsHeader.innerText = 'Options';
+    headerRow.appendChild(optionsHeader);
 
-        const addProductsRow = document.createElement('div');
-        addProductsRow.className = 'row';
-        addProductsRow.id = 'warehouse' + warehouse.id + 'addProductsRow';
-        body.appendChild(addProductsRow);
+    const products = document.createElement('tbody');
+    products.id = 'warehouse' + warehouse.id + 'products';
+    productsTable.append(products);
 
-        const addProducts = document.createElement('button');
-        addProducts.className = 'btn btn-dark';
-        addProducts.id = 'warehouse' + warehouse.id + 'addProducts';
-        addProducts.innerText = 'Add a Product';
-        addProducts.setAttribute('data-bs-toggle', 'modal');
-        addProducts.setAttribute('data-bs-target', '#addProductModal');
-        addProductsRow.appendChild(addProducts);
-    }
+    const addProductsRow = document.createElement('div');
+    addProductsRow.className = 'row';
+    addProductsRow.id = 'warehouse' + warehouse.id + 'addProductsRow';
+    body.appendChild(addProductsRow);
+
+    const addProducts = document.createElement('button');
+    addProducts.className = 'btn btn-dark';
+    addProducts.id = 'warehouse' + warehouse.id + 'addProducts';
+    addProducts.innerText = 'Add a Product';
+    addProducts.setAttribute('data-bs-toggle', 'modal');
+    addProducts.setAttribute('data-bs-target', '#addProductModal');
+    addProducts.addEventListener('click', event => {
+        document.getElementById('addProductTypeSelect').value = 'productType1addOption';
+        document.getElementById('addProductWarehouseSelect').value = 'warehouse1addOption';
+    });
+    addProductsRow.appendChild(addProducts);
+
+    const addSelect = document.getElementById('addProductWarehouseSelect');
+    const editSelect = document.getElementById('editProductWarehouseSelect');
+    const deleteSelect = document.getElementById('deleteProductWarehouseSelect');
+
+    const addOption = document.createElement('option');
+    addOption.id = 'warehouse' + warehouse.id + 'addOption';
+    addOption.value = 'warehouse' + warehouse.id + 'addOption';
+    addOption.innerText = warehouse.id + '. ' + warehouse.name;
+    addSelect.appendChild(addOption);
+
+    const editOption = document.createElement('option');
+    editOption.id = 'warehouse' + warehouse.id + 'editOption';
+    editOption.value = 'warehouse' + warehouse.id + 'editOption';
+    editOption.innerText = warehouse.id + '. ' + warehouse.name;
+    editSelect.appendChild(editOption);
+
+    const deleteOption = document.createElement('option');
+    deleteOption.id = 'warehouse' + warehouse.id + 'deleteOption';
+    deleteOption.value = 'warehouse' + warehouse.id + 'deleteOption';
+    deleteOption.innerText = warehouse.id + '. ' + warehouse.name;
+    deleteSelect.appendChild(deleteOption);
 };
 
-const addCategoriesToDom = () => {
+const addCategoryToDom = category => {
     const root = document.getElementById('categoryList');
-    for (const category of databaseData['product_categories']) {
-        const item = document.createElement('div');
-        item.className = 'accordion-item';
-        item.id = 'category' + category.id;
-        root.appendChild(item);
 
-        const header = document.createElement('h2');
-        header.className = 'accordion-header';
-        header.id = 'category' + category.id + 'header';
-        item.appendChild(header);
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+    item.id = 'category' + category.id;
+    root.appendChild(item);
 
-        const button = document.createElement('button');
-        button.className = 'accordion-button collapsed';
-        button.id = 'category' + category.id + 'button';
-        button.type = 'button';
-        button.setAttribute('data-bs-toggle', 'collapse');
-        button.setAttribute('data-bs-target', '#category' + category.id + 'collapse');
-        button.setAttribute('aria-expanded', 'false');
-        button.setAttribute('aria-controls', 'category' + category.id + 'collapse');
-        button.innerText = category.id + '. ' + category.name;
-        header.appendChild(button);
+    const header = document.createElement('h2');
+    header.className = 'accordion-header';
+    header.id = 'category' + category.id + 'header';
+    item.appendChild(header);
 
-        const collapse = document.createElement('div');
-        collapse.className = 'accordion-collapse collapse';
-        collapse.id = 'category' + category.id + 'collapse';
-        collapse.setAttribute('data-bs-parent', '#categoryList');
-        item.appendChild(collapse);
+    const button = document.createElement('button');
+    button.className = 'accordion-button collapsed';
+    button.id = 'category' + category.id + 'button';
+    button.type = 'button';
+    button.setAttribute('data-bs-toggle', 'collapse');
+    button.setAttribute('data-bs-target', '#category' + category.id + 'collapse');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', 'category' + category.id + 'collapse');
+    button.innerText = category.id + '. ' + category.name;
+    header.appendChild(button);
 
-        const body = document.createElement('div');
-        body.className = 'accordion-body d-grid gap-2';
-        body.id = 'category' + category.id + 'body';
-        collapse.appendChild(body);
+    const collapse = document.createElement('div');
+    collapse.className = 'accordion-collapse collapse';
+    collapse.id = 'category' + category.id + 'collapse';
+    collapse.setAttribute('data-bs-parent', '#categoryList');
+    item.appendChild(collapse);
 
-        const row = document.createElement('div');
-        row.className = 'row align-items-center';
-        row.id = 'category' + category.id + 'row';
-        body.appendChild(row);
+    const body = document.createElement('div');
+    body.className = 'accordion-body d-grid gap-2';
+    body.id = 'category' + category.id + 'body';
+    collapse.appendChild(body);
 
-        const description = document.createElement('div');
-        description.className = 'col-8';
-        description.id = 'category' + category.id + 'description';
-        description.innerText = category.description;
-        row.appendChild(description);
+    const row = document.createElement('div');
+    row.className = 'row align-items-center';
+    row.id = 'category' + category.id + 'row';
+    body.appendChild(row);
 
-        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'col-4 btn-group';
-        buttonGroup.id = 'category' + category.id + 'buttonGroup';
-        buttonGroup.role = 'group';
-        buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
-        row.appendChild(buttonGroup);
+    const description = document.createElement('div');
+    description.className = 'col-8';
+    description.id = 'category' + category.id + 'description';
+    description.innerText = category.description;
+    row.appendChild(description);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'btn btn-primary btn';
-        editButton.id = 'category' + category.id + 'editButton';
-        editButton.innerText = 'Edit';
-        editButton.setAttribute('data-bs-toggle', 'modal');
-        editButton.setAttribute('data-bs-target', '#editCategoryModal');
-        buttonGroup.appendChild(editButton);
+    const buttonGroup = document.createElement('div');
+    buttonGroup.className = 'col-4 btn-group';
+    buttonGroup.id = 'category' + category.id + 'buttonGroup';
+    buttonGroup.role = 'group';
+    buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
+    row.appendChild(buttonGroup);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-primary btn';
-        deleteButton.id = 'category' + category.id + 'deleteButton';
-        deleteButton.innerText = 'Delete';
-        deleteButton.setAttribute('data-bs-toggle', 'modal');
-        deleteButton.setAttribute('data-bs-target', '#deleteCategoryModal');
-        buttonGroup.appendChild(deleteButton);
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'btn btn-primary btn';
+    editButton.id = 'category' + category.id + 'editButton';
+    editButton.innerText = 'Edit';
+    editButton.setAttribute('data-bs-toggle', 'modal');
+    editButton.setAttribute('data-bs-target', '#editCategoryModal');
+    editButton.addEventListener('click', event => {
+        document.getElementById('editCategoryIdInput').value = category.id;
+        document.getElementById('editCategoryNameInput').value = category.name;
+        document.getElementById('editCategoryDescriptionInput').value = category.description;
+    });
+    buttonGroup.appendChild(editButton);
 
-        const productsTable = document.createElement('table');
-        productsTable.className = 'table';
-        productsTable.id = 'category' + category.id + 'productsTable';
-        body.appendChild(productsTable);
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-primary btn';
+    deleteButton.id = 'category' + category.id + 'deleteButton';
+    deleteButton.innerText = 'Delete';
+    deleteButton.setAttribute('data-bs-toggle', 'modal');
+    deleteButton.setAttribute('data-bs-target', '#deleteCategoryModal');
+    deleteButton.addEventListener('click', event => {
+        document.getElementById('deleteCategoryIdInput').value = category.id;
+        document.getElementById('deleteCategoryNameInput').value = category.name;
+        document.getElementById('deleteCategoryDescriptionInput').value = category.description;
+    });
+    buttonGroup.appendChild(deleteButton);
 
-        const productsHead = document.createElement('thead');
-        productsHead.id = 'category' + category.id + 'productsHead';
-        productsTable.appendChild(productsHead);
+    const productsTable = document.createElement('table');
+    productsTable.className = 'table';
+    productsTable.id = 'category' + category.id + 'productsTable';
+    body.appendChild(productsTable);
 
-        const headerRow = document.createElement('tr');
-        headerRow.id = 'category' + category.id + 'headerRow';
-        productsHead.appendChild(headerRow);
+    const productsHead = document.createElement('thead');
+    productsHead.id = 'category' + category.id + 'productsHead';
+    productsTable.appendChild(productsHead);
 
-        const idHeader = document.createElement('th');
-        idHeader.id = 'category' + category.id + 'idHeader';
-        idHeader.innerText = 'Product type id';
-        headerRow.appendChild(idHeader);
+    const headerRow = document.createElement('tr');
+    headerRow.id = 'category' + category.id + 'headerRow';
+    productsHead.appendChild(headerRow);
 
-        const typeHeader = document.createElement('th');
-        typeHeader.id = 'category' + category.id + 'typeHeader';
-        typeHeader.innerText = 'Type';
-        headerRow.appendChild(typeHeader);
+    const idHeader = document.createElement('th');
+    idHeader.id = 'category' + category.id + 'idHeader';
+    idHeader.innerText = 'Product type id';
+    headerRow.appendChild(idHeader);
 
-        const descriptionHeader = document.createElement('th');
-        descriptionHeader.id = 'category' + category.id + 'descriptionHeader';
-        descriptionHeader.innerText = 'Description';
-        headerRow.appendChild(descriptionHeader);
+    const typeHeader = document.createElement('th');
+    typeHeader.id = 'category' + category.id + 'typeHeader';
+    typeHeader.innerText = 'Type';
+    headerRow.appendChild(typeHeader);
 
-        const categoryHeader = document.createElement('th');
-        categoryHeader.id = 'category' + category.id + 'categoryHeader';
-        categoryHeader.innerText = 'Category';
-        headerRow.appendChild(categoryHeader);
+    const descriptionHeader = document.createElement('th');
+    descriptionHeader.id = 'category' + category.id + 'descriptionHeader';
+    descriptionHeader.innerText = 'Description';
+    headerRow.appendChild(descriptionHeader);
 
-        const optionsHeader = document.createElement('th');
-        optionsHeader.id = 'category' + category.id + 'optionsHeader';
-        optionsHeader.innerText = 'Options';
-        headerRow.appendChild(optionsHeader);
+    const categoryHeader = document.createElement('th');
+    categoryHeader.id = 'category' + category.id + 'categoryHeader';
+    categoryHeader.innerText = 'Category';
+    headerRow.appendChild(categoryHeader);
 
-        const products = document.createElement('tbody');
-        products.id = 'category' + category.id + 'productTypes';
-        productsTable.append(products);
+    const optionsHeader = document.createElement('th');
+    optionsHeader.id = 'category' + category.id + 'optionsHeader';
+    optionsHeader.innerText = 'Options';
+    headerRow.appendChild(optionsHeader);
 
-        const addProductsRow = document.createElement('div');
-        addProductsRow.className = 'row';
-        addProductsRow.id = 'category' + category.id + 'addProductsRow';
-        body.appendChild(addProductsRow);
+    const products = document.createElement('tbody');
+    products.id = 'category' + category.id + 'productTypes';
+    productsTable.append(products);
 
-        const addProductTypes = document.createElement('button');
-        addProductTypes.className = 'btn btn-dark';
-        addProductTypes.id = 'category' + category.id + 'addProductTypes';
-        addProductTypes.innerText = 'Add a Product Type';
-        addProductTypes.setAttribute('data-bs-toggle', 'modal');
-        addProductTypes.setAttribute('data-bs-target', '#addTypeModal');
-        addProductsRow.appendChild(addProductTypes);
-    }
+    const addProductsRow = document.createElement('div');
+    addProductsRow.className = 'row';
+    addProductsRow.id = 'category' + category.id + 'addProductsRow';
+    body.appendChild(addProductsRow);
+
+    const addProductTypes = document.createElement('button');
+    addProductTypes.className = 'btn btn-dark';
+    addProductTypes.id = 'category' + category.id + 'addProductTypes';
+    addProductTypes.innerText = 'Add a Product Type';
+    addProductTypes.setAttribute('data-bs-toggle', 'modal');
+    addProductTypes.setAttribute('data-bs-target', '#addTypeModal');
+    addProductTypes.addEventListener('click', event => {
+        document.getElementById('addTypeNameInput').value = '';
+        document.getElementById('addTypeDescriptionInput').value = '';
+        document.getElementById('addTypeCategorySelect').value = 'category1addOption';
+    });
+    addProductsRow.appendChild(addProductTypes);
+
+    const addSelect = document.getElementById('addTypeCategorySelect');
+    const editSelect = document.getElementById('editTypeCategorySelect');
+    const deleteSelect = document.getElementById('deleteTypeCategorySelect');
+
+    const addOption = document.createElement('option');
+    addOption.id = 'category' + category.id + 'addOption';
+    addOption.value = 'category' + category.id + 'addOption';
+    addOption.innerText = category.id + '. ' + category.name;
+    addSelect.appendChild(addOption);
+
+    const editOption = document.createElement('option');
+    editOption.id = 'category' + category.id + 'editOption';
+    editOption.value = 'category' + category.id + 'editOption';
+    editOption.innerText = category.id + '. ' + category.name;
+    editSelect.appendChild(editOption);
+
+    const deleteOption = document.createElement('option');
+    deleteOption.id = 'category' + category.id + 'deleteOption';
+    deleteOption.value = 'category' + category.id + 'deleteOption';
+    deleteOption.innerText = category.id + '. ' + category.name;
+    deleteSelect.appendChild(deleteOption);
 };
 
-const addProductsToDom = () => {
-    for (const product of databaseData['products']) {
-        const root = document.getElementById('warehouse' + product.warehouse.id + 'products');
+const addProductToDom = product => {
+    const root = document.getElementById('warehouse' + product.warehouse.id + 'products');
 
-        const row = document.createElement('tr');
-        row.id = 'product' + product.id + 'row';
-        root.appendChild(row);
+    const row = document.createElement('tr');
+    row.id = 'product' + product.id + 'row';
+    root.appendChild(row);
 
-        const idElement = document.createElement('td');
-        idElement.id = 'product' + product.id + 'idElement';
-        idElement.innerText = product.id;
-        row.appendChild(idElement);
+    const idElement = document.createElement('td');
+    idElement.id = 'product' + product.id + 'idElement';
+    idElement.innerText = product.id;
+    row.appendChild(idElement);
 
-        const typeElement = document.createElement('td');
-        typeElement.id = 'product' + product.id + 'typeElement';
-        typeElement.innerText = product.type.name;
-        row.appendChild(typeElement);
+    const typeElement = document.createElement('td');
+    typeElement.id = 'product' + product.id + 'typeElement';
+    typeElement.innerText = product.type.name;
+    row.appendChild(typeElement);
 
-        const descriptionElement = document.createElement('td');
-        descriptionElement.id = 'product' + product.id + 'descriptionElement';
-        descriptionElement.innerText = product.type.description;
-        row.appendChild(descriptionElement);
+    const descriptionElement = document.createElement('td');
+    descriptionElement.id = 'product' + product.id + 'descriptionElement';
+    descriptionElement.innerText = product.type.description;
+    row.appendChild(descriptionElement);
 
-        const categoryElement = document.createElement('td');
-        categoryElement.id = 'product' + product.id + 'categoryElement';
-        categoryElement.innerText = product.type.category.name;
-        row.appendChild(categoryElement);
+    const categoryElement = document.createElement('td');
+    categoryElement.id = 'product' + product.id + 'categoryElement';
+    categoryElement.innerText = product.type.category.name;
+    row.appendChild(categoryElement);
 
-        const buttonColumn = document.createElement('td');
-        row.appendChild(buttonColumn);
+    const buttonColumn = document.createElement('td');
+    row.appendChild(buttonColumn);
 
-        const buttonGroup = document.createElement('div');
-        buttonGroup.id = 'product' + product.id + 'buttonGroup';
-        buttonGroup.className = 'col-4 btn-group';
-        buttonGroup.role = 'group';
-        buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
-        buttonColumn.appendChild(buttonGroup);
+    const buttonGroup = document.createElement('div');
+    buttonGroup.id = 'product' + product.id + 'buttonGroup';
+    buttonGroup.className = 'col-4 btn-group';
+    buttonGroup.role = 'group';
+    buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
+    buttonColumn.appendChild(buttonGroup);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'btn btn-primary btn';
-        editButton.id = 'product' + product.id + 'editButton';
-        editButton.innerText = 'Edit';
-        editButton.setAttribute('data-bs-toggle', 'modal');
-        editButton.setAttribute('data-bs-target', '#editProductModal');
-        buttonGroup.appendChild(editButton);
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'btn btn-primary btn';
+    editButton.id = 'product' + product.id + 'editButton';
+    editButton.innerText = 'Edit';
+    editButton.setAttribute('data-bs-toggle', 'modal');
+    editButton.setAttribute('data-bs-target', '#editProductModal');
+    editButton.addEventListener('click', event => {
+        document.getElementById('editProductIdInput').value = product.id;
+        document.getElementById('editProductTypeSelect').value = 'productType' + product.type.id + 'editOption';
+        document.getElementById('editProductWarehouseSelect').value = 'warehouse' + product.warehouse.id + 'editOption';
+    });
+    buttonGroup.appendChild(editButton);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-primary btn';
-        deleteButton.id = 'product' + product.id + 'deleteButton';
-        deleteButton.innerText = 'Delete';
-        deleteButton.setAttribute('data-bs-toggle', 'modal');
-        deleteButton.setAttribute('data-bs-target', '#deleteProductModal');
-        buttonGroup.appendChild(deleteButton);
-    }
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-primary btn';
+    deleteButton.id = 'product' + product.id + 'deleteButton';
+    deleteButton.innerText = 'Delete';
+    deleteButton.setAttribute('data-bs-toggle', 'modal');
+    deleteButton.setAttribute('data-bs-target', '#deleteProductModal');
+    deleteButton.addEventListener('click', event => {
+        document.getElementById('deleteProductIdInput').value = product.id;
+        document.getElementById('deleteProductTypeSelect').value = 'productType' + product.type.id + 'deleteOption';
+        document.getElementById('deleteProductWarehouseSelect').value = 'warehouse' + product.warehouse.id + 'deleteOption';
+    });
+    buttonGroup.appendChild(deleteButton);
 };
 
-const addProductTypesToDom = () => {
-    for (const productType of databaseData['product_types']) {
-        const root = document.getElementById('category' + productType.category.id + 'productTypes');
+const addProductTypeToDom = productType => {
+    const root = document.getElementById('category' + productType.category.id + 'productTypes');
 
-        const row = document.createElement('tr');
-        row.id = 'productType' + productType.id + 'row';
-        root.appendChild(row);
+    const row = document.createElement('tr');
+    row.id = 'productType' + productType.id + 'row';
+    root.appendChild(row);
 
-        const idElement = document.createElement('td');
-        idElement.id = 'productType' + productType.id + 'idElement';
-        idElement.innerText = productType.id;
-        row.appendChild(idElement);
+    const idElement = document.createElement('td');
+    idElement.id = 'productType' + productType.id + 'idElement';
+    idElement.innerText = productType.id;
+    row.appendChild(idElement);
 
-        const typeElement = document.createElement('td');
-        typeElement.id = 'productType' + productType.id + 'typeElement';
-        typeElement.innerText = productType.name;
-        row.appendChild(typeElement);
+    const typeElement = document.createElement('td');
+    typeElement.id = 'productType' + productType.id + 'typeElement';
+    typeElement.innerText = productType.name;
+    row.appendChild(typeElement);
 
-        const descriptionElement = document.createElement('td');
-        descriptionElement.id = 'productType' + productType.id + 'descriptionElement';
-        descriptionElement.innerText = productType.description;
-        row.appendChild(descriptionElement);
+    const descriptionElement = document.createElement('td');
+    descriptionElement.id = 'productType' + productType.id + 'descriptionElement';
+    descriptionElement.innerText = productType.description;
+    row.appendChild(descriptionElement);
 
-        const categoryElement = document.createElement('td');
-        categoryElement.id = 'productType' + productType.id + 'categoryElement';
-        categoryElement.innerText = productType.category.name;
-        row.appendChild(categoryElement);
+    const categoryElement = document.createElement('td');
+    categoryElement.id = 'productType' + productType.id + 'categoryElement';
+    categoryElement.innerText = productType.category.name;
+    row.appendChild(categoryElement);
 
-        const buttonColumn = document.createElement('td');
-        row.appendChild(buttonColumn);
+    const buttonColumn = document.createElement('td');
+    row.appendChild(buttonColumn);
 
-        const buttonGroup = document.createElement('div');
-        buttonGroup.id = 'productType' + productType.id + 'buttonGroup';
-        buttonGroup.className = 'col-4 btn-group';
-        buttonGroup.role = 'group';
-        buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
-        buttonColumn.appendChild(buttonGroup);
+    const buttonGroup = document.createElement('div');
+    buttonGroup.id = 'productType' + productType.id + 'buttonGroup';
+    buttonGroup.className = 'col-4 btn-group';
+    buttonGroup.role = 'group';
+    buttonGroup.setAttribute('aria-label', 'Edit or Delete?');
+    buttonColumn.appendChild(buttonGroup);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'btn btn-primary btn';
-        editButton.id = 'productType' + productType.id + 'editButton';
-        editButton.innerText = 'Edit';
-        editButton.setAttribute('data-bs-toggle', 'modal');
-        editButton.setAttribute('data-bs-target', '#editTypeModal');
-        buttonGroup.appendChild(editButton);
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.className = 'btn btn-primary btn';
+    editButton.id = 'productType' + productType.id + 'editButton';
+    editButton.innerText = 'Edit';
+    editButton.setAttribute('data-bs-toggle', 'modal');
+    editButton.setAttribute('data-bs-target', '#editTypeModal');
+    editButton.addEventListener('click', event => {
+        document.getElementById('editTypeIdInput').value = productType.id;
+        document.getElementById('editTypeNameInput').value = productType.name;
+        document.getElementById('editTypeDescriptionInput').value = productType.description;
+        document.getElementById('editTypeCategorySelect').value = 'category' + productType.category.id + 'editOption';
+    });
+    buttonGroup.appendChild(editButton);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.className = 'btn btn-primary btn';
-        deleteButton.id = 'productType' + productType.id + 'deleteButton';
-        deleteButton.innerText = 'Delete';
-        deleteButton.setAttribute('data-bs-toggle', 'modal');
-        deleteButton.setAttribute('data-bs-target', '#deleteTypeModal');
-        buttonGroup.appendChild(deleteButton);
-    }
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn btn-primary btn';
+    deleteButton.id = 'productType' + productType.id + 'deleteButton';
+    deleteButton.innerText = 'Delete';
+    deleteButton.setAttribute('data-bs-toggle', 'modal');
+    deleteButton.setAttribute('data-bs-target', '#deleteTypeModal');
+    deleteButton.addEventListener('click', event => {
+        document.getElementById('deleteTypeIdInput').value = productType.id;
+        document.getElementById('deleteTypeNameInput').value = productType.name;
+        document.getElementById('deleteTypeDescriptionInput').value = productType.description;
+        document.getElementById('deleteTypeCategorySelect').value = 'category' + productType.category.id + 'deleteOption';
+    });
+    buttonGroup.appendChild(deleteButton);
+
+    const addSelect = document.getElementById('addProductTypeSelect');
+    const editSelect = document.getElementById('editProductTypeSelect');
+    const deleteSelect = document.getElementById('deleteProductTypeSelect');
+
+    const addOption = document.createElement('option');
+    addOption.id = 'productType' + productType.id + 'addOption';
+    addOption.value = 'productType' + productType.id + 'addOption';
+    addOption.innerText = productType.id + '. ' + productType.name;
+    addSelect.appendChild(addOption);
+
+    const editOption = document.createElement('option');
+    editOption.id = 'productType' + productType.id + 'editOption';
+    editOption.value = 'productType' + productType.id + 'editOption';
+    editOption.innerText = productType.id + '. ' + productType.name;
+    editSelect.appendChild(editOption);
+
+    const deleteOption = document.createElement('option');
+    deleteOption.id = 'productType' + productType.id + 'deleteOption';
+    deleteOption.value = 'productType' + productType.id + 'deleteOption';
+    deleteOption.innerText = productType.id + '. ' + productType.name;
+    deleteSelect.appendChild(deleteOption);
 };
 
 const updateDom = () => {
-    addWarehousesToDom();
-    addCategoriesToDom();
-    addProductsToDom();
-    addProductTypesToDom();
+    for (const warehouse of databaseData['warehouses']) {
+        addWarehouseToDom(warehouse);
+    }
+    for (const category of databaseData['product_categories']) {
+        addCategoryToDom(category);
+    }
+    for (const product of databaseData['products']) {
+        addProductToDom(product);
+    }
+    for (const productType of databaseData['product_types']) {
+        addProductTypeToDom(productType);
+    }
 };
 
-document.getElementById('btnradio1').addEventListener('change', event => {
+document.getElementById('radioButtonProducts').addEventListener('change', event => {
     document.getElementById('warehouseList').style.display = 'block';
     document.getElementById('addWarehouseButton').style.display = 'block';
     document.getElementById('categoryList').style.display = 'none';
     document.getElementById('addCategoryButton').style.display = 'none';
 });
 
-document.getElementById('btnradio2').addEventListener('change', event => {
+document.getElementById('radioButtonProductTypes').addEventListener('change', event => {
     document.getElementById('warehouseList').style.display = 'none';
     document.getElementById('addWarehouseButton').style.display = 'none';
     document.getElementById('categoryList').style.display = 'block';
     document.getElementById('addCategoryButton').style.display = 'block';
+});
+
+document.getElementById('addWarehouseButton').addEventListener('click', event => {
+    document.getElementById('addWarehouseNameInput').value = '';
+    document.getElementById('addWarehouseDescriptionInput').value = '';
+});
+
+document.getElementById('addCategoryButton').addEventListener('click', event => {
+    document.getElementById('addCategoryNameInput').value = '';
+    document.getElementById('addCategoryDescriptionInput').value = '';
+});
+
+document.getElementById('addWarehouseSaveButton').addEventListener('click', event => {
+    const name = document.getElementById('addWarehouseNameInput').value;
+    const description = document.getElementById('addWarehouseDescriptionInput').value;
+
+    fetch(backendUrl + '/warehouses', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description})
+    })
+    .then(data => data.json())
+    .then(dataJson => addWarehouseToDom(dataJson))
+    .catch(error => console.error(error));
+});
+
+document.getElementById('addCategorySaveButton').addEventListener('click', event => {
+    const name = document.getElementById('addCategoryNameInput').value;
+    const description = document.getElementById('addCategoryDescriptionInput').value;
+
+    fetch(backendUrl + '/product_categories', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: name, description: description})
+    })
+    .then(data => data.json())
+    .then(dataJson => addCategoryToDom(dataJson))
+    .catch(error => console.error(error));
 });
 
 document.addEventListener('DOMContentLoaded', () => {

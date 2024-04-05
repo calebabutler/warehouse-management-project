@@ -24,10 +24,10 @@
                     <li class="nav-item">
                         <form>
                             <div class="btn-group" role="group">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked />
-                                <label class="btn btn-outline-light" for="btnradio1">Products</label>
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" />
-                                <label class="btn btn-outline-light" for="btnradio2">Product Types</label>
+                                <input type="radio" class="btn-check" name="btnradio" id="radioButtonProducts" checked />
+                                <label class="btn btn-outline-light" for="radioButtonProducts">Products</label>
+                                <input type="radio" class="btn-check" name="btnradio" id="radioButtonProductTypes" />
+                                <label class="btn btn-outline-light" for="radioButtonProductTypes">Product Types</label>
                             </div>
                         </form>
                     </li>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addWarehouseSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -79,7 +79,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editWarehouseSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="deleteWarehouseButton">Delete</button>
                         </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addProductSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -156,7 +156,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editProductSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -184,7 +184,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="deleteProductButton">Delete</button>
                         </div>
                     </form>
                 </div>
@@ -207,7 +207,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addCategorySaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -233,7 +233,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editCategorySaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -258,7 +258,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="deleteCategoryButton">Delete</button>
                         </div>
                 </div>
             </div>
@@ -283,7 +283,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addTypeSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -312,7 +312,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editTypeSaveButton">Save</button>
                         </div>
                     </form>
                 </div>
@@ -340,7 +340,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="deleteTypeButton">Delete</button>
                         </div>
                 </div>
             </div>
